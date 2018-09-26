@@ -2,7 +2,8 @@ package parserJson
 
 
 import org.scalatest.FlatSpec
-import play.api.libs.json.{ JsNull, Json, JsString, JsValue }
+import parserJson.ParserJson.CsvLine
+import play.api.libs.json.{JsNull, JsString, JsValue, Json}
 
 class ParserJsonTest extends FlatSpec {
   "Quand on passe au ParserJson un json vide" should
@@ -27,7 +28,7 @@ class ParserJsonTest extends FlatSpec {
   }
 
   "Quand on passe au ParserJson un json comprenant un tableau avec au moins 2 éléments" should
-    "affiche l'age des elements du tableau trouvé" in {
+    "affiche le nom et l'age des elements du tableau trouvé" in {
     val sample: JsValue = Json.parse("""
       {
         "name" : "Watership Down",
@@ -47,7 +48,7 @@ class ParserJsonTest extends FlatSpec {
       }
       """)
 
-    assert(ParserJson.findSeq(sample, "residents") == """Place(Watership Down,Location(51.235685,-1.309197),List(Resident(Fiver,4,None), Resident(Bigwig,6,Some(Owsla))))""")
+    assert(ParserJson.findResidentsNameAndAge(sample) == List(CsvLine("Fiver",4), CsvLine("Bigwig",6)))
   }
 
 }
